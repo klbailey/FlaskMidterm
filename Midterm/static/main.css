@@ -1,0 +1,369 @@
+/* static/main.css */
+body {
+  background: rgb(75, 166, 166);
+  color: #333333;
+  margin-top: 1rem;
+}
+
+/* Add custom styles for the header */
+header {
+  background-color: #333; /* Set background color */
+  color: #fff; /* Set text color */
+  padding: 1rem 0; /* Add padding */
+}
+
+.container {
+  display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+}
+
+.header-left {
+  margin-right: 20px; 
+  margin-left: 50px;
+}
+.header-middle {
+  display: flex;
+  flex-direction: column;
+  margin-right: auto;
+}
+
+.logo {
+  width: 50px; /* Adjust as needed */
+  height: auto;
+}
+.header-left h1 {
+  margin: 0; /* Reset margin */
+  font-size: 3rem; /* Set font size */
+  font-family: Brush Script MT, Brush Script Std, cursive;
+  font-weight: bold; /* Set font weight */
+  /* padding-right: 37px; */
+  
+}
+.header-left img {
+  width: 37px; /* Adjust the width of logo */
+  height: 40px;
+  margin-right: 25px; /* Add space between logo and title */
+  animation: spin 2s infinite linear; /* Apply the spin animation */
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg); /* Start with no rotation */
+  }
+  100% {
+    transform: rotate(360deg); /* Rotate 360 degrees (one full spin) */
+  }
+}
+/* ************* */
+
+.header-left h1 {
+  /* Remove default margin */
+  margin: 0; 
+  font-size: 3rem; /* Set font size */
+  font-family: Brush Script MT, Brush Script Std, cursive;
+  font-weight: bold; /* Set font weight */
+  margin-left: 0px;
+}
+
+.header-right {
+  /* margin-right: 25px; 
+  margin-left: 10px; */
+  margin-left: auto;
+}
+.header-right nav ul {
+  list-style-type: none; /* Remove bullet points */
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove default padding */
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.header-right nav ul li:first-child {
+  margin-right: auto; /* Push "Home" to the left */
+}
+.header-right nav ul li:not(:last-child) {
+  margin-right: 1rem; /* Adjust as needed */
+}
+
+.header-right nav ul li {
+  /* Display horizontally */
+  /* display: inline-block;  */
+  /* Add space between items */
+  margin-right: 1rem; 
+  margin-left: 30px;
+}
+
+.header-right nav ul li a {
+  color: #fff; /* Set link color */
+  text-decoration: none; /* Remove underline */
+}
+
+main {
+  margin: 0 20px; /* Add left and right margins */
+  padding: 2rem; /* Add some padding for better spacing */
+  min-height: calc(100vh - 15rem); /* Set minimum height of main to fill the remaining space */
+}
+
+.recipe-image {
+  max-width: 200px; /* Set maximum width */
+  height: auto; /* Maintain aspect ratio */
+}
+
+/* Add custom styles for the recipe */
+.recipe-container {
+  border: 1px solid #ccc; /* Add border */
+  padding: 10px; /* Add padding */
+  display: flex; /* Use flexbox for layout */
+  align-items: flex-start; /* Align items at the start of the container */
+  margin-bottom: 20px; /* Add margin at the bottom */
+  margin-left: 50px;
+}
+
+.recipe-image {
+  flex: 0 0 30%; /* Occupy 30% of the container width */
+  padding-right: 20px; /* Add padding to separate from recipe details */
+}
+
+.recipe-image img {
+  max-width: 100%; /* Ensure image does not exceed container width */
+  height: auto; /* Maintain aspect ratio */
+  display: block; /* Remove extra space beneath the image */
+}
+
+.recipe-details {
+  flex: 1; /* Occupy remaining space */
+  text-align: left; /* Left-align recipe details */
+}
+
+.recipe-details h3 {
+  margin-top: 0; /* Remove default margin for heading */
+}
+
+.recipe-details p {
+  margin-top: 0.5em; /* Add margin between paragraphs */
+}
+
+.recipe-actions {
+  margin-top: 1em; /* Add margin at the top */
+}
+
+.recipe-actions .btn {
+  margin-right: 0.5rem; /* Add space between buttons */
+}
+
+footer {
+  text-align: center; /* Center-align footer content */
+  padding: 1rem; /* Add some padding for better spacing */
+}
+
+label {
+  font-size: 1.2rem; /* Adjust the font size as needed */
+}
+
+/* Increase the height of input fields */
+input[type="text"],
+input[type="password"],
+textarea {
+  height: 2rem; /* Adjust the height as needed */
+  padding: 0.5rem; /* Add padding for better appearance */
+  font-size: 1.2rem; /* Adjust font size */
+}
+
+/* Increase the height of buttons */
+button {
+  height: 3rem; /* Adjust the height as needed */
+  padding: 0.5rem 1rem; /* Add padding for better appearance */
+  font-size: 1.2rem; /* Adjust font size */
+}
+
+/* Adjust the alignment of form field labels and inputs */
+.form-group label {
+  text-align: left; /* Left-align form field labels */
+}
+
+.form-control {
+  width: 100%; /* Ensure form inputs take full width */
+  text-align: left; /* Left-align form inputs */
+}
+
+/* Add custom styles for the add_recipe form */
+.form-group {
+  margin-bottom: 20px; /* Add margin between form groups */
+}
+
+.form-control {
+  padding: 10px; /* Add padding for better appearance */
+  font-size: 16px; /* Adjust font size */
+  border: 1px solid #ccc; /* Add border */
+  border-radius: 5px; /* Add border radius */
+}
+
+.form-control-file {
+  padding: 10px; /* Add padding for better appearance */
+  font-size: 16px; /* Adjust font size */
+  border: 1px solid #ccc; /* Add border */
+  border-radius: 5px; /* Add border radius */
+}
+
+.btn-primary {
+  background-color: #007bff; /* Set button background color */
+  color: #fff; /* Set button text color */
+  border: none; /* Remove button border */
+  padding: 10px 20px; /* Add padding */
+  font-size: 16px; /* Adjust font size */
+  border-radius: 5px; /* Add border radius */
+  cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+.btn-primary:hover {
+  background-color: #0056b3; /* Change background color on hover */
+}
+/* registration */
+/* styles.css */
+.registration-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+/* Login */
+/* styles.css */
+.login-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-check-input {
+  margin-top: 5px;
+}
+
+.teal-button,
+.btn.btn-danger {
+  background-color: teal;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.teal-button:hover {
+  background-color: darkcyan;
+}
+
+
+.btn-primary {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+/*  */
+/* Add margin-right to social media links */
+.social-media-link {
+  margin-right: 10px; /* Adjust as needed */
+}
+.social-media-link:last-child {
+  margin-right: 50px; /* Adjust as needed */
+}
+
+
+/* Add pseudo-element to create spacing between navigation links and social media links */
+.header-right nav ul:after {
+  content: "";
+  display: block;
+  flex-grow: 1;
+}
+
+.fa-heart {
+  display: inline-block; /* or inline */
+  /* Add any other styles as needed */
+}
+
+.btn.like-button {
+  background-color:rgb(155, 223, 223);
+  padding: 10px;
+  max-height: 25 px;
+  margin-bottom: 17px;
+  font-size: 15px;
+}
+
+/* Reduce search bar height */
+.header-right nav ul li .search-form input[type="text"] {
+  height: 1rem;
+  font-size: 1rem;
+}
+
+/* Reduce search button height */
+.header-right nav ul li .search-form button {
+  height: 2rem;
+  font-size: 1rem;
+  margin-left: 5px;
+  padding: 5px;
+  margin-right: 25px;
+}
+/* Vertically center search bar */
+.header-right nav ul li .search-form {
+  display: flex;
+  align-items: center;
+}

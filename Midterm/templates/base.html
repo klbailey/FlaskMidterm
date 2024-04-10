@@ -1,0 +1,76 @@
+<!-- base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+
+            <div class="header-left">
+                <img src="/static/images/logo.png" alt="Logo" class="logo">
+            </div>
+            <div class="header-middle">
+                <h1>Recipe App</h1>
+            </div>
+            
+            <!-- <div class="header-left">
+                <img src="/static/images/logo.png" alt="Logo" class="logo">
+                <h1>Recipe App</h1>
+            </div> -->
+
+            <div class="header-right">                
+                <nav>
+                    
+                    <ul>
+                        {% if current_user.is_authenticated %}
+                            <li><a href="{{ url_for('index') }}">Home</a></li>
+                            <li><a href="{{ url_for('add_recipe') }}">Add Recipe</a></li>
+                            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                            
+                            
+                        {% else %}
+                            <li><a href="{{ url_for('index') }}">Home</a></li>
+                            <li><a href="{{ url_for('login') }}">Login</a></li>
+                            <li><a href="{{ url_for('register') }}">Register</a></li>
+                        {% endif %}
+                        <li>
+                            <form class="search-form" action="{{ url_for('search') }}" method="GET">
+                                <input type="text" name="query" placeholder="Search recipes...">
+                                <button type="submit">Search</button>
+                            </form>
+                        </li>
+                        <!-- social media link -->
+                        
+                        <li class="social-media-link"><a href="URL_TO_FACEBOOK_PROFILE" target="_blank"><i class="fab fa-facebook"></i></a></li>
+                        <li class="social-media-link"><a href="URL_TO_INSTAGRAM_PROFILE" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                        <li class="social-media-link"><a href="URL_TO_TWITTER_PROFILE" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>
+        <p>&copy; 2024 Recipe App</p>
+    </footer>
+</body>
+</html>
+    

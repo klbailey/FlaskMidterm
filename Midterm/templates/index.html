@@ -1,0 +1,49 @@
+<!-- index.html -->
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    <h2>Recipes</h2>
+    {% for recipe in recipes %}
+        <div class="recipe-container">
+            <div class="recipe-image">
+                {% if recipe.image %}
+                    <img src="{{ url_for('static', filename='images/' + recipe.image) }}" alt="{{ recipe.title }}">
+                {% endif %}
+            </div>
+            <div class="recipe-details">
+                <h3>{{ recipe.title }}</h3>
+                <p><strong>Description:</strong> {{ recipe.description }}</p>
+                <p><strong>Ingredients:</strong></p>
+                <ul>
+                    {% for ingredient in recipe.ingredients.split('\n') %}
+                        <li>{{ ingredient }}</li>
+                    {% endfor %}
+                </ul>
+                <p><strong>Instructions:</strong></p>
+                <ol>
+                    {% for instruction in recipe.instructions.split('\n') %}
+                        <li>{{ instruction }}</li>
+                    {% endfor %}
+                </ol>
+                <div class="recipe-actions">
+                    <!-- FORM FOR LIKING THE RECIPE -->
+                    <form method="POST" action="{{ url_for('like_recipe', recipe_id=recipe.id) }}">
+                        <!-- LIKE BUTTON DISPLAYING THE LIKES COUNT -->
+                        <button type="submit" class="btn like-button"><i class="far fa-heart"></i> Like ({{ recipe.likes }})</button>
+                    </form>
+                    <br>
+                    <!-- EDIT AND DELETE BUTTONS -->
+                    <a href="{{ url_for('edit_recipe', recipe_id=recipe.id) }}" class="btn teal-button">Edit</a>
+                    <form action="{{ url_for('delete_recipe', recipe_id=recipe.id) }}" method="POST" style="display: inline;">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+                
+                <!-- <div class="recipe-actions">
+                    <a href="{{ url_for('edit_recipe', recipe_id=recipe.id) }}" class="btn teal-button">Edit</a>
+                    <a href="{{ url_for('delete_recipe', recipe_id=recipe.id) }}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this recipe?')">Delete</a>
+                </div> -->
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
