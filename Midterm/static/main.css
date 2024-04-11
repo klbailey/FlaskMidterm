@@ -14,9 +14,10 @@ header {
 
 .container {
   display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 0;
+  justify-content: space-between;
+  align-items: center;
+  /* padding: 1rem 0; ********* */
+  padding: 20px;
 }
 
 .header-left {
@@ -105,37 +106,41 @@ main {
   padding: 2rem; /* Add some padding for better spacing */
   min-height: calc(100vh - 15rem); /* Set minimum height of main to fill the remaining space */
 }
-
+.recipe-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* Adjust the gap between recipe divs */
+}
 .recipe-image {
-  max-width: 200px; /* Set maximum width */
+  width: 100%; /* Ensure image fills the container */
   height: auto; /* Maintain aspect ratio */
+}
+
+.recipe-details {
+  display: grid;
+  grid-template-rows: auto auto auto auto; /* Define four rows with auto height */
+  row-gap: 10px; /* Add gap between rows */
 }
 
 /* Add custom styles for the recipe */
 .recipe-container {
-  border: 1px solid #ccc; /* Add border */
-  padding: 10px; /* Add padding */
-  display: flex; /* Use flexbox for layout */
-  align-items: flex-start; /* Align items at the start of the container */
-  margin-bottom: 20px; /* Add margin at the bottom */
-  margin-left: 50px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Adjust as needed */
+  grid-gap: 20px; /* Adjust the gap between recipe divs */
 }
 
 .recipe-image {
-  flex: 0 0 30%; /* Occupy 30% of the container width */
-  padding-right: 20px; /* Add padding to separate from recipe details */
+  width: 100%; /* Ensure image fills the container */
+  height: auto; /* Maintain aspect ratio */
 }
 
 .recipe-image img {
-  max-width: 100%; /* Ensure image does not exceed container width */
-  height: auto; /* Maintain aspect ratio */
-  display: block; /* Remove extra space beneath the image */
+  width: 100%; /* Ensure image fills the container */
+  height: 100%; /* Ensure image fills the container */
+  object-fit: cover; /* Maintain aspect ratio and cover the container */
 }
 
-.recipe-details {
-  flex: 1; /* Occupy remaining space */
-  text-align: left; /* Left-align recipe details */
-}
+
 
 .recipe-details h3 {
   margin-top: 0; /* Remove default margin for heading */
@@ -366,4 +371,83 @@ label {
 .header-right nav ul li .search-form {
   display: flex;
   align-items: center;
+}
+.category-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.category {
+  text-align: center;
+  margin: 0 10px;
+}
+
+/* ********* */
+.category p {
+  margin-top: 10px; /* Add margin between image and text */
+  object-fit: cover; /* Maintain aspect ratio and cover the container */
+}
+
+/* main.css */
+.category-image {
+  width: 200px; /* Set a fixed width for the images */
+  height: 150px; /* Set a fixed height for the images */
+  object-fit: cover; /* Maintain aspect ratio and cover the container */
+}
+/* **** */
+.category img {
+  width: 200px; /* Adjust image width */
+  height: auto; /* Maintain aspect ratio */
+}
+.category a.category-link {
+  display: block; /* Display as block element to position below the image */
+  margin-top: 10px; /* Add some space between the image and the link */
+}
+.category h3 {
+  margin-top: 10px; /* Add margin between image and title */
+}
+/* Add custom styles for the dessert images */
+.dessert-container img {
+  width: 50px; /* Set width to desired thumbnail size */
+  height: auto; /* Maintain aspect ratio */
+  display: block; /* Remove any extra space below the image */
+  margin: 0 auto; /* Center the image horizontally */
+}
+.dessert-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.placeholder {
+  text-align: center;
+}
+.recipe {
+  border: 1px solid #ccc; /* Add border around the recipe */
+  padding: 20px; /* Add padding inside the recipe container */
+  display: flex; /* Use flexbox for layout */
+  flex-direction: column; /* Stack items vertically */
+}
+.recipe .top-section {
+  display: flex; /* Use flexbox for layout */
+  align-items: flex-start; /* Align items to the start of the container */
+}
+
+.recipe .bottom-section {
+  display: flex; /* Use flexbox for layout */
+  flex-direction: column; /* Stack items vertically */
+}
+
+.recipe .top-section img {
+  margin-right: 10px; /* Add spacing between the image and likes */
+  width: 150px; /* Adjust the width as needed */
+  height: 200px; /* Maintain aspect ratio */
+}
+
+.recipe .bottom-section h3 {
+  margin-top: 0; /* Remove default margin for heading */
+}
+
+.recipe .bottom-section p {
+  margin-top: 0.5em; /* Add margin between paragraphs */
 }

@@ -1,0 +1,21 @@
+<!-- dessert.html -->
+{% extends 'base.html' %}
+{% block title %}Dessert Recipes{% endblock %}
+{% block content %}
+    <h2>Dessert Recipes</h2>
+    <div class="recipe-container">
+        {% for recipe in recipes %}
+        <div class="recipe">           
+            <!-- <img src="{{ url_for('static', filename=recipe.image) }}" alt="{{ recipe.title }}"> -->
+            <img src="{{ url_for('static', filename='images/' + recipe.image) }}" alt="{{ recipe.title }}" style="width: 100px; height: auto;">
+            <p>Likes: {{ recipe.likes }}</p>
+                <a href="{{ url_for('view_recipe', recipe_id=recipe.id) }}"> <!-- Link to view_recipe with recipe_id -->
+                    <h3>{{ recipe.title }}</h3>
+                </a>
+            <p>{{ recipe.description }}</p>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+

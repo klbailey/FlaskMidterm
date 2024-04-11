@@ -1,7 +1,7 @@
 # form.py
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 
 class LoginForm(FlaskForm):
@@ -20,6 +20,7 @@ class RegistrationForm(FlaskForm):
 class RecipeForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
+    category = SelectField('Category', choices=[('main_dish', 'Main Dish'), ('vegetables', 'Vegetables'), ('cocktail', 'Cocktail'), ('dessert', 'Dessert')], validators=[DataRequired()])
     ingredients = TextAreaField('Ingredients', validators=[DataRequired()], render_kw={"class": "custom-textarea"})  
     instructions = TextAreaField('Instructions', validators=[DataRequired()])
     image = FileField('Image', validators=[FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Images only!')])
@@ -30,8 +31,15 @@ class RecipeForm(FlaskForm):
         if field.data is not None and not field.data.startswith('example'):
             raise ValidationError('Field must start with "example".')
 
-    my_field = StringField('My Field', validators=[custom_validator])
+    # my_field = StringField('My Field', validators=[custom_validator])
 
+    def validate_ingredients(self, ingredients):
+        # Custom validation for ingredients field if needed
+        pass
+
+    def validate_instructions(self, instructions):
+        # Custom validation for instructions field if needed
+        pass
 
     # def validate(self):
     #     if not super().validate():

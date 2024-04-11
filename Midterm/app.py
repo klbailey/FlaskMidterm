@@ -3,9 +3,13 @@ from flask import Flask, render_template, redirect, url_for, flash, request, abo
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.datastructures import FileStorage
+
 from form import RecipeForm, RegistrationForm, LoginForm, DeleteRecipeForm
 from werkzeug.utils import secure_filename
 from flask_migrate import Migrate
+from sqlalchemy import desc
+import secrets
 import os
 
 app = Flask(__name__)
@@ -40,9 +44,10 @@ class Recipe(db.Model):
     instructions = db.Column(db.Text, nullable=False)
     image = db.Column(db.String(255), nullable=True)
     likes = db.Column(db.Integer, default=0)  # New field to store the number of likes
+    category = db.Column(db.String(100), nullable=True)  # Add the category column
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', backref='recipes', lazy=True)
-
+    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
 @login_manager.user_loader
@@ -53,6 +58,13 @@ def load_user(user_id):
 def index():
     recipes = Recipe.query.all()
     return render_template('index.html', recipes=recipes)
+
+# Category
+@app.route('/category/<category_name>')
+def category(category_name):
+    # Retrieve recipes for the category and order them by ID in descending order
+    category_recipes = Recipe.query.filter_by(category=category_name).order_by(desc(Recipe.id)).all()
+    return render_template('category.html', category_name=category_name, recipes=category_recipes)
 
 # Login
 @app.route('/login', methods=['GET', 'POST'])
@@ -89,8 +101,57 @@ def register():
         db.session.commit()  # Commit changes to the database
         login_user(new_user)  # Log in the newly registered user
         flash('Account created successfully. Welcome!', 'success')
-        return redirect(url_for('view_recipe'))  # Redirect to view_recipe page after successful registration
+        return redirect(url_for('index'))  # Redirect to view_recipe page after successful registration
     return render_template('register.html', form=form)  # Pass the RegistrationForm object to the template
+
+# main dish
+@app.route('/main_dish')
+def main_dish():
+    # Query the database for recipes with the 'cocktail' category
+    recipes = Recipe.query.filter_by(category='main_dish').all()
+
+    # Debug logging
+    app.logger.debug(f"Found {len(recipes)} main_dish recipes")
+
+    # Render the cocktail.html template and pass the recipes
+    return render_template('main_dish.html', recipes=recipes)
+
+# veggies
+@app.route('/vegetables')
+def vegetables():
+    # Query the database for recipes with the 'cocktail' category
+    recipes = Recipe.query.filter_by(category='vegetables').all()
+
+    # Debug logging
+    app.logger.debug(f"Found {len(recipes)} vegetables recipes")
+
+    # Render the cocktail.html template and pass the recipes
+    return render_template('vegetables.html', recipes=recipes)
+
+# cocktail
+@app.route('/cocktail')
+def cocktail():
+    # Query the database for recipes with the 'cocktail' category
+    recipes = Recipe.query.filter_by(category='cocktail').all()
+
+    # Debug logging
+    app.logger.debug(f"Found {len(recipes)} cocktail recipes")
+
+    # Render the cocktail.html template and pass the recipes
+    return render_template('cocktail.html', recipes=recipes)
+
+# Dessert
+@app.route('/dessert')
+def dessert():
+    # Query the database for recipes with the 'dessert' category
+    recipes = Recipe.query.filter_by(category='dessert').all()
+
+    # Debug logging
+    app.logger.debug(f"Found {len(recipes)} dessert recipes")
+
+    # Render the dessert.html template and pass the recipes
+    return render_template('dessert.html', recipes=recipes)
+
 
 # Like Recipe
 @app.route('/like_recipe/<int:recipe_id>', methods=['POST'])
@@ -118,105 +179,124 @@ def view_recipe(recipe_id):
         # Handle case where recipe is not found
         return render_template('error.html', message='Recipe not found'), 404
 
-# Add recipe# Add Recipe route
+
+
+
+# ****************
 @app.route('/add_recipe', methods=['GET', 'POST'])
 @login_required
 def add_recipe():
     form = RecipeForm()
     if form.validate_on_submit():
-        title = form.title.data
-        description = form.description.data
-        ingredients = form.ingredients.data
-        instructions = form.instructions.data
-
-        # Process the ingredients and instructions input
-        ingredients_list = [ingredient.strip() for ingredient in ingredients.split('\n') if ingredient.strip()]
-        instructions_list = [instruction.strip() for instruction in instructions.split('\n') if instruction.strip()]
-
-        # Check if an image file was uploaded
-        if 'image' in request.files:
-            image_file = request.files['image']
-            if image_file.filename != '':
-                # Save the image file to the specified upload folder
-                filename = secure_filename(image_file.filename)
-                image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                image_file.save(image_path)
-
-        # Create a new Recipe instance with the form data
+        # HANDLE FILE UPLOAD
+        image_filename = None
+        if form.image.data:  # CHECK IF IMAGE DATA EXISTS
+            image = form.image.data
+            image_filename = save_image(image)  # SAVE THE IMAGE AND GET THE FILENAME
+        
+        # CREATE A NEW RECIPE OBJECT
         new_recipe = Recipe(
-            title=title,
-            description=description,
-            ingredients='\n'.join(ingredients_list),
-            instructions='\n'.join(instructions_list),
-            image=filename if 'filename' in locals() else None,
-            user=current_user
+            title=form.title.data,
+            description=form.description.data,
+            ingredients=form.ingredients.data,
+            instructions=form.instructions.data,
+            image=image_filename,  # USE FILENAME INSTEAD OF FileStorage OBJECT
+            likes=0,  # SET LIKES DEFAULT VALUE
+            category=form.category.data.lower(),  # ENSURE CATEGORY IS LOWERCASE
+            user_id=current_user.id
         )
-
-        # Add the new recipe to the database
+        # ADD THE NEW RECIPE TO THE DATABASE
         db.session.add(new_recipe)
         db.session.commit()
 
-        # Flash a success message
-        flash('Recipe added successfully!', 'success')
-
-        # Redirect to the view_recipe page
-        return redirect(url_for('view_recipe', recipe_id=new_recipe.id))
-
-    # If the form is not submitted or is invalid, render the add_recipe template with the form
+        # REDIRECT TO THE APPROPRIATE CATEGORY PAGE
+        return redirect(url_for('category', category_name=new_recipe.category))
+    
     return render_template('add_recipe.html', form=form)
 
+
+def save_image(image):
+    # GENERATE A UNIQUE FILENAME FOR THE IMAGE
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(image.filename)
+    image_fn = random_hex + f_ext
+    # SAVE THE IMAGE TO THE UPLOADS FOLDER
+    image_path = os.path.join(app.config['UPLOAD_FOLDER'], image_fn)
+    image.save(image_path)
+    return image_fn
+
+
 # Edit Recipe
-
 @app.route('/edit_recipe/<int:recipe_id>', methods=['GET', 'POST'])
-@login_required  # Ensure that only logged-in users can access this route
+@login_required
 def edit_recipe(recipe_id):
-    # Retrieve the recipe from the database based on the provided recipe_id
     recipe = Recipe.query.get_or_404(recipe_id)
-
+    
     # Check if the current user is the owner of the recipe
     if recipe.user != current_user:
-        # If not, abort with a 403 Forbidden error
-        abort(403)
-
-    # Create a form instance and populate it with the recipe data
+        flash('You are not authorized to edit this recipe.', 'error')
+        return redirect(url_for('index'))  # Redirect the user back to the home page
+    
     form = RecipeForm(obj=recipe)
-
     if form.validate_on_submit():
-        # Update the recipe data based on the form submission
-        recipe.title = form.title.data
-        recipe.description = form.description.data
+        # Update the recipe object with form data
+        form.populate_obj(recipe)
+
+        # Handle image upload if a new image is provided
+        if form.image.data:
+            image = form.image.data
+            image_filename = save_image(image)  # SAVE THE NEW IMAGE AND GET THE FILENAME
+            # Delete the old image file if it exists
+            if recipe.image:
+                delete_image(recipe.image.filename)  # Pass the filename string
+            recipe.image = image_filename  # UPDATE THE IMAGE FILENAME
+
+        # Ensure category is lowercase
+        if form.category.data:
+            recipe.category = form.category.data.lower()
         
-        # Process the ingredients and instructions input
-        ingredients_list = [ingredient.strip() for ingredient in form.ingredients.data.split('\n') if ingredient.strip()]
-        instructions_list = [instruction.strip() for instruction in form.instructions.data.split('\n') if instruction.strip()]
-
-        recipe.ingredients = '\n'.join(ingredients_list)
-        recipe.instructions = '\n'.join(instructions_list)
-
-        # Check if the 'keep_image' checkbox is checked
-        if form.keep_image.data:
-            # Keep the existing image
-            pass
-        else:
-            # Check if an image file was uploaded
-            if 'image' in request.files:
-                image_file = request.files['image']
-                if image_file.filename != '':
-                    # Save the image file to the specified upload folder
-                    filename = secure_filename(image_file.filename)
-                    image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                    image_file.save(image_path)
-                    # Update the image attribute of the recipe with the new filename
-                    recipe.image = filename
-
-        # Save the updated recipe to the database
         db.session.commit()
+        flash('Your recipe has been updated!', 'success')
+        
+        # Redirect to the appropriate page based on the new category
+        if recipe.category == 'dessert':
+            return redirect(url_for('dessert'))
+        elif recipe.category == 'vegetables':
+            return redirect(url_for('vegetables'))
+        elif recipe.category == 'cocktail':
+            return redirect(url_for('cocktail'))
+        else:
+            return redirect(url_for('index'))
+    
+    return render_template('edit_recipe.html', form=form)
 
-        # Redirect to the view_recipe page for the updated recipe
-        return redirect(url_for('view_recipe', recipe_id=recipe.id))
 
-    # If it's a GET request or the form is not valid, render the edit_recipe template
-    return render_template('edit_recipe.html', form=form, recipe=recipe)
+
+def save_image(image):
+    if image and isinstance(image, FileStorage):  # Check if image is not None and is a FileStorage object
+        # GENERATE A UNIQUE FILENAME FOR THE IMAGE
+        random_hex = secrets.token_hex(8)
+        _, f_ext = os.path.splitext(image.filename)
+        image_fn = random_hex + f_ext
+        # SAVE THE IMAGE TO THE UPLOADS FOLDER
+        image_path = os.path.join(app.config['UPLOAD_FOLDER'], image_fn)
+        image.save(image_path)
+        return image_fn
+    return None
+
+
+
+def delete_image(filename):
+    # DELETE THE IMAGE FILE
+    if isinstance(filename, str):  # Check if filename is a string
+        image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        if os.path.exists(image_path):
+            os.remove(image_path)
+    else:
+        # Log or handle the error if filename is not a string
+        print("Error: Filename is not a string")
+
+
 
 
 @app.route('/logout')

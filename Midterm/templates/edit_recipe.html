@@ -1,8 +1,9 @@
+<!-- edit_recipe.html -->
 {% extends 'base.html' %}
-{% block title %}Edit Recipe{% endblock %}
+
 {% block content %}
     <h2>Edit Recipe</h2>
-    <form method="post">
+    <form method="POST" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <div class="form-group">
             {{ form.title.label }} {{ form.title(class="form-control") }}
@@ -17,22 +18,22 @@
             {% endfor %}
         </div>
         <div class="form-group">
-            {{ form.ingredients.label }} {{ form.ingredients(class="form-control", style="height: 200px;") }}
+            {{ form.category.label }} {{ form.category(class="form-control") }}
+            {% for error in form.category.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.ingredients.label }} {{ form.ingredients(class="form-control") }}
             {% for error in form.ingredients.errors %}
                 <span class="text-danger">{{ error }}</span>
             {% endfor %}
-            {% if form.ingredients.label.text == 'Ingredients' %}
-                <small class="form-text text-muted">Separate each entry with an empty line.</small>
-            {% endif %}
         </div>
         <div class="form-group">
-            {{ form.instructions.label }} {{ form.instructions(class="form-control", style="height: 250px;") }}
+            {{ form.instructions.label }} {{ form.instructions(class="form-control") }}
             {% for error in form.instructions.errors %}
                 <span class="text-danger">{{ error }}</span>
             {% endfor %}
-            {% if form.instructions.label.text == 'Instructions' %}
-                <small class="form-text text-muted">Separate each step with an empty line.</small>
-            {% endif %}
         </div>
         <div class="form-group">
             {{ form.image.label }} {{ form.image(class="form-control-file") }}
@@ -40,9 +41,7 @@
                 <span class="text-danger">{{ error }}</span>
             {% endfor %}
         </div>
-        <div class="form-group form-check">
-            {{ form.keep_image(class="form-check-input") }} {{ form.keep_image.label(class="form-check-label") }}
-        </div>
         <button type="submit" class="btn btn-primary">Save Changes</button>
     </form>
 {% endblock %}
+

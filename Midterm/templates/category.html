@@ -1,0 +1,20 @@
+
+<!-- category.html -->
+{% extends 'base.html' %}
+{% block content %}
+    <h2>{{ category_name|capitalize }} Recipes</h2>
+    <ul>
+    {% for recipe in recipes %}
+        <li>
+            <h3>{{ recipe.title }}</h3>
+            <p><strong>Description:</strong> {{ recipe.description }}</p>
+            <p><strong>Ingredients:</strong> {{ recipe.ingredients }}</p>
+            <p><strong>Instructions:</strong> {{ recipe.instructions }}</p>
+            {% if recipe.image %}
+            <img src="{{ url_for('static', filename='images/' + recipe.image) }}" alt="Recipe Image" style="max-width: 200px;">
+            {% endif %}
+            <!-- Add more details if needed -->
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}
