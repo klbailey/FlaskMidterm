@@ -104,24 +104,38 @@ def register():
         return redirect(url_for('index'))  # Redirect to view_recipe page after successful registration
     return render_template('register.html', form=form)  # Pass the RegistrationForm object to the template
 
+
 # main dish
 @app.route('/main_dish')
 def main_dish():
     # Query the database for recipes with the 'cocktail' category
     recipes = Recipe.query.filter_by(category='main_dish').all()
-
+    print("This is recipe:", recipes[1].image)
     # Debug logging
     app.logger.debug(f"Found {len(recipes)} main_dish recipes")
 
     # Render the cocktail.html template and pass the recipes
     return render_template('main_dish.html', recipes=recipes)
 
+# Edit Recipe
+@app.route('/edit_recipeonetime/<int:recipe_id>', methods=['GET'])
+ 
+def edit_recipeonetime(recipe_id):
+    recipe = Recipe.query.get_or_404(recipe_id)
+    
+    recipe.image = 'paella.jpg'  # UPDATE THE IMAGE FILENAME
+ 
+    db.session.commit()
+       
+    return redirect('/')
+ 
+
+
 # veggies
 @app.route('/vegetables')
 def vegetables():
     # Query the database for recipes with the 'cocktail' category
-    recipes = Recipe.query.filter_by(category='vegetables').all()
-
+    recipes = Recipe.query.filter_by(category='vegetables').all() 
     # Debug logging
     app.logger.debug(f"Found {len(recipes)} vegetables recipes")
 
@@ -345,4 +359,3 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True, port=5000)
-

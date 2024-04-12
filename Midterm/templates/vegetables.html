@@ -10,9 +10,9 @@
         {% for recipe in recipes %}
             <div class="recipe">
                 {% if recipe.image is not none %}
-                    <div class="recipe-image">
+                    <div class="recipe-image" style="display: flex; justify-content: center; align-items: center;">
                         <a href="{{ url_for('view_recipe', recipe_id=recipe.id) }}">
-                            <img src="{{ url_for('static', filename='images/' + recipe.image) }}" alt="{{ recipe.title }}">
+                            <img src="{{ url_for('static', filename='images/' + recipe.image) }}" alt="{{ recipe.title }}"  style="width: 150px; height: 200px;">
                         </a>
                     </div>
                 {% endif %}

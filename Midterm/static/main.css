@@ -107,14 +107,17 @@ main {
   min-height: calc(100vh - 15rem); /* Set minimum height of main to fill the remaining space */
 }
 .recipe-container {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Adjust as needed */
+  justify-content: center; /* Center the grid horizontally */
   gap: 20px; /* Adjust the gap between recipe divs */
+  
 }
 .recipe-image {
   width: 100%; /* Ensure image fills the container */
   height: auto; /* Maintain aspect ratio */
 }
+
 
 .recipe-details {
   display: grid;
@@ -422,15 +425,19 @@ label {
 .placeholder {
   text-align: center;
 }
+
+
 .recipe {
   border: 1px solid #ccc; /* Add border around the recipe */
-  padding: 20px; /* Add padding inside the recipe container */
-  display: flex; /* Use flexbox for layout */
-  flex-direction: column; /* Stack items vertically */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center items horizontally within each recipe */
+  padding: 10px; /* Add padding inside the recipe container */
 }
 .recipe .top-section {
   display: flex; /* Use flexbox for layout */
   align-items: flex-start; /* Align items to the start of the container */
+  
 }
 
 .recipe .bottom-section {
@@ -450,4 +457,29 @@ label {
 
 .recipe .bottom-section p {
   margin-top: 0.5em; /* Add margin between paragraphs */
+}
+/* dessert.css */
+.recipe.dessert-recipe {
+  display: flex; /* Use flexbox for layout */
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Center items horizontally */
+}
+
+.recipe.dessert-recipe img {
+  margin-bottom: 10px; /* Add spacing between image and likes */
+}
+
+.recipe.dessert-recipe .recipe-details {
+  text-align: center; /* Center-align recipe details */
+}
+
+.recipe.dessert-recipe .recipe-details h3 {
+  margin-top: 0; /* Remove default margin for heading */
+}
+
+.recipe.dessert-recipe img {
+  width: 150%; /* Ensure image fills the container */
+  height: 220px; /* Maintain aspect ratio */
+  /* Limit maximum width for consistency */
+  max-width: 200px; 
 }
