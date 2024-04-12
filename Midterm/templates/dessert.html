@@ -1,3 +1,4 @@
+
 <!-- dessert.html -->
 {% extends 'base.html' %}
 {% block title %}Dessert Recipes{% endblock %}
@@ -6,12 +7,17 @@
     <div class="recipe-container">
         {% for recipe in recipes %}
         <div class="recipe dessert-recipe">
-            <img src="{{ url_for('static', filename='images/' + recipe.image) }}" alt="{{ recipe.title }}">
+            {% if recipe.image %}
+                <img src="{{ url_for('static', filename='images/' + recipe.image) }}" alt="{{ recipe.title }}">
+            {% else %}
+                <img src="{{ url_for('static', filename='images/default.jpg') }}" alt="{{ recipe.title }}">
+            {% endif %}
             <div class="recipe-details">
                 <p class="likes">Likes: {{ recipe.likes }}</p>
                 <a href="{{ url_for('view_recipe', recipe_id=recipe.id) }}">
                     <h3>{{ recipe.title }}</h3>
                 </a>
+                <p>Recipe by: {{ recipe.user.username }}</p>
                 <p>{{ recipe.description }}</p>
             </div>
         </div>

@@ -297,24 +297,35 @@ label {
 .form-check-input {
   margin-top: 5px;
 }
-
 .teal-button,
-.btn.btn-danger {
-  background-color: teal;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
+.btn.btn-delete {
+  background-color: teal; /* Set button background color */
+  color: white; /* Set button text color */
+  border: none; /* Remove button border */
+  padding: 10px 20px; /* Add padding */
+  border-radius: 5px; /* Add border radius */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  width: 150px; /* Set width of the buttons */
+  height: 40px; /* Set height of the buttons */
+  text-align: center; /* Center-align button text */
+  font-family: inherit; /* Inherit font from parent */
+  text-decoration: none; /* Remove underline */
+  font-size: 16px; /* Adjust font size */
 }
 
-.teal-button:hover {
-  background-color: darkcyan;
+/* Adjust the hover color for both buttons */
+.teal-button:hover,
+.btn.btn-delete:hover {
+  background-color: #0056b3; /* Change background color on hover */
 }
 
-
+/* Adjust the size of the delete button */
+.btn.btn-delete {
+  width: 75px; /* Match the width of the edit button */
+  height: 40px; /* Match the height of the edit button */
+}
 .btn-primary {
-  background-color: #007bff;
+  background-color: teal;
   color: #fff;
   border: none;
   padding: 10px 20px;
@@ -482,4 +493,37 @@ label {
   height: 220px; /* Maintain aspect ratio */
   /* Limit maximum width for consistency */
   max-width: 200px; 
+}
+/* main_dish */
+.recipe.main_dish { /* Target only main_dish recipes */
+  border: 1px solid #ccc; /* Add border around the recipe */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center items horizontally within each recipe */
+  padding: 10px; /* Add padding inside the recipe container */
+}
+
+.recipe.main_dish .top-section {
+  display: flex; /* Use flexbox for layout */
+  align-items: flex-start; /* Align items to the start of the container */
+}
+
+.recipe.main_dish .bottom-section {
+  display: flex; /* Use flexbox for layout */
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Center items horizontally */
+}
+
+.recipe.main_dish .top-section img {
+  margin-right: 10px; /* Add spacing between the image and likes */
+  width: 150px; /* Adjust the width as needed */
+  height: 200px; /* Maintain aspect ratio */
+}
+
+.recipe.main_dish .bottom-section h3 {
+  margin-top: 0; /* Remove default margin for heading */
+}
+
+.recipe.main_dish .bottom-section p {
+  margin-top: 0.5em; /* Add margin between paragraphs */
 }

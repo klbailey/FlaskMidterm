@@ -11,42 +11,36 @@
 <body>
     <header>
         <div class="container">
-
             <div class="header-left">
                 <img src="/static/images/logo.png" alt="Logo" class="logo">
-            </div>
-            <div class="header-middle">
                 <h1>Flask Fusions & Food</h1>
             </div>
-            
-            <!-- <div class="header-left">
-                <img src="/static/images/logo.png" alt="Logo" class="logo">
-                <h1>Recipe App</h1>
-            </div> -->
 
             <div class="header-right">                
                 <nav>
-                    
                     <ul>
                         {% if current_user.is_authenticated %}
                             <li><a href="{{ url_for('index') }}">Home</a></li>
                             <li><a href="{{ url_for('add_recipe') }}">Add Recipe</a></li>
                             <li><a href="{{ url_for('logout') }}">Logout</a></li>
-                            
-                            
                         {% else %}
                             <li><a href="{{ url_for('index') }}">Home</a></li>
                             <li><a href="{{ url_for('login') }}">Login</a></li>
                             <li><a href="{{ url_for('register') }}">Register</a></li>
                         {% endif %}
+                        
+                        <!-- Redirect to index page when clicking on "Categories" -->
+                        <li><a href="{{ url_for('index') }}">Categories</a></li>
+                        
+                        <!-- Keep search bar -->
                         <li>
                             <form class="search-form" action="{{ url_for('search') }}" method="GET">
                                 <input type="text" name="query" placeholder="Search recipes...">
                                 <button type="submit">Search</button>
                             </form>
                         </li>
-                        <!-- social media link -->
                         
+                        <!-- Social media links -->
                         <li class="social-media-link"><a href="URL_TO_FACEBOOK_PROFILE" target="_blank"><i class="fab fa-facebook"></i></a></li>
                         <li class="social-media-link"><a href="URL_TO_INSTAGRAM_PROFILE" target="_blank"><i class="fab fa-instagram"></i></a></li>
                         <li class="social-media-link"><a href="URL_TO_TWITTER_PROFILE" target="_blank"><i class="fab fa-twitter"></i></a></li>
@@ -73,4 +67,3 @@
     </footer>
 </body>
 </html>
-    

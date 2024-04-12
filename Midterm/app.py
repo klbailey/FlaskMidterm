@@ -164,7 +164,10 @@ def dessert():
     app.logger.debug(f"Found {len(recipes)} dessert recipes")
 
     # Render the dessert.html template and pass the recipes
-    return render_template('dessert.html', recipes=recipes)
+    username = str(current_user.username) if current_user.is_authenticated else ''
+    return render_template('dessert.html', recipes=recipes, username=username)
+
+
 
 
 # Like Recipe
@@ -230,16 +233,18 @@ def add_recipe():
 
 
 def save_image(image):
-    # GENERATE A UNIQUE FILENAME FOR THE IMAGE
-    random_hex = secrets.token_hex(8)
-    _, f_ext = os.path.splitext(image.filename)
-    image_fn = random_hex + f_ext
-    # SAVE THE IMAGE TO THE UPLOADS FOLDER
-    image_path = os.path.join(app.config['UPLOAD_FOLDER'], image_fn)
-    image.save(image_path)
-    return image_fn
+    if image and isinstance(image, FileStorage):  # Check if image is not None and is a FileStorage object
+        # GENERATE A UNIQUE FILENAME FOR THE IMAGE
+        random_hex = secrets.token_hex(8)
+        _, f_ext = os.path.splitext(image.filename)
+        image_fn = random_hex + f_ext
+        # SAVE THE IMAGE TO THE UPLOADS FOLDER
+        image_path = os.path.join(app.config['UPLOAD_FOLDER'], image_fn)
+        image.save(image_path)
+        return image_fn
+    return None
 
-
+# Edit Recipe
 # Edit Recipe
 @app.route('/edit_recipe/<int:recipe_id>', methods=['GET', 'POST'])
 @login_required
@@ -259,10 +264,13 @@ def edit_recipe(recipe_id):
         # Handle image upload if a new image is provided
         if form.image.data:
             image = form.image.data
+            if isinstance(recipe.image, str):  # Check if recipe.image is a string (filename)
+                # Delete the old image file if it exists
+                delete_image(recipe.image)
+            else:
+                # Delete the old image file object if it exists
+                delete_image(recipe.image.filename)
             image_filename = save_image(image)  # SAVE THE NEW IMAGE AND GET THE FILENAME
-            # Delete the old image file if it exists
-            if recipe.image:
-                delete_image(recipe.image.filename)  # Pass the filename string
             recipe.image = image_filename  # UPDATE THE IMAGE FILENAME
 
         # Ensure category is lowercase
@@ -283,7 +291,6 @@ def edit_recipe(recipe_id):
             return redirect(url_for('index'))
     
     return render_template('edit_recipe.html', form=form)
-
 
 
 def save_image(image):
@@ -327,8 +334,7 @@ def search():
     recipes = Recipe.query.filter(Recipe.title.ilike(f'%{query}%')).all()
     return render_template('search_results.html', recipes=recipes, query=query)
 
-# Delette recipe
-
+# Delete recipe
 @app.route('/delete_recipe/<int:recipe_id>', methods=['GET', 'POST'])
 @login_required  # Ensure that only logged-in users can access this route
 def delete_recipe(recipe_id):
@@ -337,8 +343,8 @@ def delete_recipe(recipe_id):
 
     # Check if the current user is the owner of the recipe
     if recipe.user != current_user:
-        # If not, abort with a 403 Forbidden error
-        abort(403)
+        flash('You are not authorized to delete this recipe.', 'error')
+        return redirect(url_for('index'))
 
     form = DeleteRecipeForm()  # Create an instance of the DeleteRecipeForm
     if request.method == 'POST' and form.validate_on_submit():

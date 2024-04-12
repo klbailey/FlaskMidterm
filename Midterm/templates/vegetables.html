@@ -1,30 +1,28 @@
-
-<!-- vegetables.html -->
 {% extends 'base.html' %}
 
 {% block title %}Vegetable Recipes{% endblock %}
 
 {% block content %}
-    <h2>Vegetable Recipes</h2>
+    <h2 style="text-align: center;">Vegetable Recipes</h2>
     <div class="recipe-container">
         {% for recipe in recipes %}
-            <div class="recipe">
-                {% if recipe.image is not none %}
+            <div class="recipe" style="display: flex; flex-direction: column; align-items: center;">
+                {% if recipe.image %}
                     <div class="recipe-image" style="display: flex; justify-content: center; align-items: center;">
                         <a href="{{ url_for('view_recipe', recipe_id=recipe.id) }}">
-                            <img src="{{ url_for('static', filename='images/' + recipe.image) }}" alt="{{ recipe.title }}"  style="width: 150px; height: 200px;">
+                            <img src="{{ url_for('static', filename='images/' + recipe.image) }}" alt="{{ recipe.title }}" style="width: 150px; height: 200px;">
                         </a>
                     </div>
                 {% endif %}
-                <div class="recipe-details">
-                    <p>Likes: {{ recipe.likes }}</p>
+                <div class="recipe-details" style="text-align: center;">
+                    <p style="margin-bottom: 5px;">Likes: {{ recipe.likes }}</p>
                     <a href="{{ url_for('view_recipe', recipe_id=recipe.id) }}">
-                        <h3>{{ recipe.title }}</h3>
+                        <h3 style="margin-top: 0; margin-bottom: 5px;">{{ recipe.title }}</h3>
                     </a>
-                    <p>{{ recipe.description }}</p>
+                    <p style="margin-bottom: 5px;">Recipe by: {{ recipe.user.username }}</p>
+                    <p style="margin-bottom: 0;">{{ recipe.description }}</p>
                 </div>
             </div>
         {% endfor %}
     </div>
 {% endblock %}
-
