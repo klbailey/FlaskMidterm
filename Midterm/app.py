@@ -19,7 +19,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'static/images'
 
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+# migrate = Migrate(app, db)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
@@ -119,17 +119,22 @@ def main_dish():
 
 # Edit Recipe
 @app.route('/edit_recipeonetime/<int:recipe_id>', methods=['GET'])
- 
 def edit_recipeonetime(recipe_id):
     recipe = Recipe.query.get_or_404(recipe_id)
+  
+    if 'image' in request.files:
+        uploaded_file = request.files['image']
+        if uploaded_file.filename != '':
+            filename = secure_filename(uploaded_file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            uploaded_file.save(file_path)
+            recipe.image = filename
+    # Assuming 'new_image_filename.jpg' is the desired filename
+    # recipe.image = 'new_image_filename.jpg'
     
-    recipe.image = 'paella.jpg'  # UPDATE THE IMAGE FILENAME
- 
     db.session.commit()
        
     return redirect('/')
- 
-
 
 # veggies
 @app.route('/vegetables')
@@ -360,8 +365,8 @@ def delete_recipe(recipe_id):
 
 
 
-
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True, port=5000)
+
